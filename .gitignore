@@ -1,0 +1,12 @@
+.idea/
+.c9/
+.vscode/
+node_modules/
+package-lock.json
+nohup.out
+*.pem
+*.key
+cert.*
+*.crt
+*.csr
+*.cert

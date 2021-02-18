@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -eu
+
+main() {
+  certbot --rsa-key-size 4096 --no-bootstrap certonly --manual --manual-public-ip-logging-ok \
+    -d jsx.jp \
+    -d *.jsx.jp \
+    -d *.secure.jsx.jp \
+    -d *.gcp.jsx.jp \
+    -d *.aws.jsx.jp \
+    -d *.in.jsx.jp \
+    --preferred-challenges dns --agree-tos --register-unsafely-without-email
+  cd /etc/letsencrypt/live
+  rm $(find . -name README)
+  zip -r /root/tls *
+  echo "Created - $(ls -lh /root/tls.zip)"
+}
+
+main
