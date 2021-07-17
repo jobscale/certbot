@@ -6,9 +6,12 @@ main() {
     -d jsx.jp \
     -d *.jsx.jp \
     -d *.secure.jsx.jp \
-    -d *.gcp.jsx.jp \
-    -d *.aws.jsx.jp \
+    -d *.jp.jsx.jp \
+    -d *.us.jsx.jp \
+    -d *.eu.jsx.jp \
+    -d *.os.jsx.jp \
     -d *.in.jsx.jp \
+    -d *.out.jsx.jp \
     --preferred-challenges dns --agree-tos --register-unsafely-without-email
   cd /etc/letsencrypt/live
   rm $(find . -name README)
