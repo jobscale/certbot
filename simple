@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -eu
+
+cat dns-txt | grep -e _acme-challenge -A 2 | grep -v '^[-]*$' \
+ | sed -e 's/^_acme-challenge/txt _acme-challenge/' \
+ | sed -e 's/.jsx.jp with the following value://g' | tee record
+vi record

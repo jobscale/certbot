@@ -18,9 +18,9 @@ main() {
     -d *.in.jsx.jp \
     -d *.s.jsx.jp \
     -d *.x.jsx.jp \
-    --preferred-challenges dns --agree-tos --register-unsafely-without-email
+    --preferred-challenges dns --register-unsafely-without-email \
+    --agree-tos | tee dns-txt
   cd /etc/letsencrypt/live
-  rm $(find . -name README)
   zip -r /root/tls *
   echo "Created - $(ls -lh /root/tls.zip)"
 }
