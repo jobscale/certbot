@@ -11,9 +11,12 @@ main() {
     -d *.gate.jsx.jp \
     -d *.shop.jsx.jp \
     -d *.cms.jsx.jp \
+    -d *.api.jsx.jp \
     -d *.jp.jsx.jp \
     -d *.us.jsx.jp \
     -d *.eu.jsx.jp \
+    -d *.fr.jsx.jp \
+    -d *.cn.jsx.jp \
     -d *.os.jsx.jp \
     -d *.in.jsx.jp \
     -d *.s.jsx.jp \

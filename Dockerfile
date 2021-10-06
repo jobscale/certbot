@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 SHELL ["bash", "-c"]
 WORKDIR /root
 ENV DEBIAN_FRONTEND noninteractive
