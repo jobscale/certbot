@@ -1,7 +1,24 @@
 #!/usr/bin/env bash
 set -eu
 
-cat dns-txt | grep -e _acme-challenge -A 2 | grep -v '^[-]*$' \
- | sed -e 's/^_acme-challenge/txt _acme-challenge/' \
- | sed -e 's/.jsx.jp with the following value://g' | tee record
-vi record
+sanitize() {
+  count=0
+  for i in $(cat record)
+  do
+    echo -n $i
+    count=$(echo "$count + 1" | bc)
+    [[ $(echo "$count % 3" | bc) == 0 ]] && echo
+  done
+}
+
+main() {
+  cat dns-txt | grep -e _acme-challenge -A 2 | grep -v '^[-]*$' \
+  | sed -e 's/^_acme-challenge/txt _acme-challenge/' \
+  | sed -e 's/.jsx.jp with the following value://g' | tee record
+  echo
+  echo 'type  sub domain          value'
+  echo '--- ------------------- -------------------------------------------'
+  sanitize | tee dns-record
+}
+
+main
