@@ -7,3 +7,14 @@ main() {
   docker run --rm --name certbot -it local/certbot bash
 } && main
 ```
+
+### run
+```
+./certbot
+```
+
+### dns records
+```
+./simple
+```
+

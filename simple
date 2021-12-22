@@ -5,7 +5,7 @@ sanitize() {
   count=0
   for i in $(cat record)
   do
-    echo -n $i
+    echo -n "$i "
     count=$(echo "$count + 1" | bc)
     [[ $(echo "$count % 3" | bc) == 0 ]] && echo
   done
