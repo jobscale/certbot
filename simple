@@ -7,7 +7,12 @@ sanitize() {
   do
     echo -n "$i "
     count=$(echo "$count + 1" | bc)
-    [[ $(echo "$count % 3" | bc) == 0 ]] && echo
+    if [[ $(echo "$count % 3" | bc) == 0 ]]
+    then
+      echo
+    else
+      echo -n ' '
+    fi
   done
 }
 
