@@ -1,0 +1,31 @@
+a @ 54.164.79.249
+cname * @
+
+a proxy 172.16.6.22
+
+a in 172.16.6.121
+cname *.in in
+
+a a 127.0.0.1
+cname *.a a
+
+a os 99.79.141.18
+cname *.os os
+
+a us 54.164.79.249
+cname *.us us
+
+a eu 172.16.6.22
+cname *.eu eu
+
+a jp 34.97.110.212
+cname *.jp jp
+
+cname cdn jobscale.github.io.
+cname *.cdn cdn
+
+mx ASPMX.L.GOOGLE.COM. 1
+mx ALT1.ASPMX.L.GOOGLE.COM. 5
+mx ALT2.ASPMX.L.GOOGLE.COM. 5
+mx ALT3.ASPMX.L.GOOGLE.COM. 10
+mx ALT4.ASPMX.L.GOOGLE.COM. 10

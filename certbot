@@ -5,13 +5,13 @@ main() {
   certbot --rsa-key-size 4096 --no-bootstrap certonly --manual \
     -d jsx.jp \
     -d *.jsx.jp \
-    -d *.secure.jsx.jp \
-    -d *.share.jsx.jp \
-    -d *.store.jsx.jp \
-    -d *.gate.jsx.jp \
-    -d *.shop.jsx.jp \
-    -d *.cms.jsx.jp \
     -d *.api.jsx.jp \
+    -d *.out.jsx.jp \
+    -d *.one.jsx.jp \
+    -d *.ae.jsx.jp \
+    -d *.co.jsx.jp \
+    -d *.me.jsx.jp \
+    -d *.ne.jsx.jp \
     -d *.jp.jsx.jp \
     -d *.us.jsx.jp \
     -d *.eu.jsx.jp \
@@ -19,6 +19,11 @@ main() {
     -d *.cn.jsx.jp \
     -d *.os.jsx.jp \
     -d *.in.jsx.jp \
+    -d *.io.jsx.jp \
+    -d *.a.jsx.jp \
+    -d *.c.jsx.jp \
+    -d *.e.jsx.jp \
+    -d *.o.jsx.jp \
     -d *.s.jsx.jp \
     -d *.x.jsx.jp \
     --preferred-challenges dns --register-unsafely-without-email \
