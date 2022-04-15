@@ -5,6 +5,7 @@ main() {
   certbot --rsa-key-size 4096 --no-bootstrap certonly --manual \
     -d jsx.jp \
     -d *.jsx.jp \
+    -d *.secure.jsx.jp \
     -d *.api.jsx.jp \
     -d *.out.jsx.jp \
     -d *.one.jsx.jp \
