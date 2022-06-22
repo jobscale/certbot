@@ -3,9 +3,6 @@ cname * @
 
 a proxy 172.16.6.22
 
-a secure 54.164.79.249
-cname *.secure secure
-
 a in 172.16.6.121
 cname *.in in
 
