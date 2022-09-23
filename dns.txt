@@ -1,7 +1,8 @@
-a @ 54.164.79.249
+a @ 52.204.78.9
 cname * @
 
 a proxy 172.16.6.22
+cname *.proxy proxy
 
 a in 172.16.6.121
 cname *.in in
@@ -12,20 +13,28 @@ cname *.a a
 a os 99.79.141.18
 cname *.os os
 
-a us 54.164.79.249
-cname *.us us
-
-a eu 172.16.6.22
-cname *.eu eu
-
 a jp 34.97.110.212
 cname *.jp jp
+
+a red 160.16.151.146
+cname *.red red
+
+a m 160.16.151.146
+cname *.m m
+
+a mail 54.164.79.249
+cname *.mail mail
+
+a deta 76.223.55.44
+a deta 75.2.69.226
 
 cname cdn jobscale.github.io.
 cname *.cdn cdn
 
-mx ASPMX.L.GOOGLE.COM. 1
-mx ALT1.ASPMX.L.GOOGLE.COM. 5
-mx ALT2.ASPMX.L.GOOGLE.COM. 5
-mx ALT3.ASPMX.L.GOOGLE.COM. 10
-mx ALT4.ASPMX.L.GOOGLE.COM. 10
+mx mx1.m.jsx.jp. 1
+mx mx2.m.jsx.jp. 5
+mx mx3.m.jsx.jp. 10
+
+mx mx1.mail.jsx.jp. 1 mail.jsx.jp.
+mx mx2.mail.jsx.jp. 5 mail.jsx.jp.
+mx mx3.mail.jsx.jp. 10 mail.jsx.jp.
