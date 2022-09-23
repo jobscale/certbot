@@ -1,6 +1,9 @@
 a @ 52.204.78.9
 cname * @
 
+a us 52.204.78.9
+cname *.us us
+
 a proxy 172.16.6.22
 cname *.proxy proxy
 
