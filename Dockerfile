@@ -1,8 +1,8 @@
-FROM debian:bullseye-slim
+FROM node:lts-bullseye
 SHELL ["bash", "-c"]
 WORKDIR /root
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install -y vim git zip unzip curl tree \
+RUN apt-get update && apt-get install -y curl git vim zip unzip tree \
  tmux openssh-client iproute2 dnsutils iputils-ping netcat ncat procps \
  bc certbot
 RUN rm -fr /var/lib/apt/lists/*
