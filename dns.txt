@@ -13,7 +13,7 @@ cname *.in in
 a a 127.0.0.1
 cname *.a a
 
-a os 99.79.141.18
+a os 13.113.105.26
 cname *.os os
 
 a jp 34.97.110.212
@@ -22,22 +22,40 @@ cname *.jp jp
 a red 160.16.151.146
 cname *.red red
 
-a m 160.16.151.146
-cname *.m m
-
-a mail 54.164.79.249
-cname *.mail mail
-
 a deta 76.223.55.44
 a deta 75.2.69.226
 
 cname cdn jobscale.github.io.
 cname *.cdn cdn
 
-mx mx1.m.jsx.jp. 1
-mx mx2.m.jsx.jp. 5
-mx mx3.m.jsx.jp. 10
+###
+### Mail Server (@jsx.jp)
+###
+a m 160.16.151.146
+cname *.m m
 
-mx mx1.mail.jsx.jp. 1 mail.jsx.jp.
-mx mx2.mail.jsx.jp. 5 mail.jsx.jp.
-mx mx3.mail.jsx.jp. 10 mail.jsx.jp.
+# DNS MX entry
+mx m 1
+mx mx1.m 10
+mx mx2.m 20
+mx mx3.m 30
+
+# DNS SPF entry
+txt @ v=spf1 mx a:m.jsx.jp ~all
+
+# DNS TLSA entry
+tlsa _25._tcp.m 2 1 1 0b9fa5a59eed715c26c1020c711b4f6ec42d58b0015e14337a39dad301c5afc3
+
+# DNS client auto-configuration (RFC6186) entries
+srv _submission._tcp 1 1 587 m.jsx.jp.
+srv _imap._tcp 1 1 143 m.jsx.jp.
+srv _pop3._tcp 1 1 110 m.jsx.jp.
+srv _imaps._tcp 1 1 993 m.jsx.jp.
+srv _pop3s._tcp 1 1 995 m.jsx.jp.
+
+# DNS DKIM entry
+txt dkim._domainkey v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyRXce6iQEIN6o9bazbqWAvyM8XtoSnom5IOhgaDZ4Shs0VT7n18Tuq247f0bftjZ6CP/Asi7U2xRgEhvon/xA4uh7+0Hl1BRFnJZs7C7E2/g1a2z/yIH4qa90lQauAA4DqeXbyHjg7BAjrF/XnuaG011uK9j1aT0uN2qNcaVwEcb2eOkjtTeX1fiCKr7 tm/xW1cX+54iG3s4f2RxA/LMwF46MCqj9/n6t3VGkWuCyJ30a3Vun2MlFitAjMka3P9xQNA84IkWt+CavFzktwS5Tcng8nTkOmlwbfmN/BSkyb5mAotWoWFWN0+CvYOjIkgHdviguB13cnSV1IHiJ0Q+SwIDAQAB
+
+# DNS DMARC entry
+txt _dmarc v=DMARC1; p=reject; rua=mailto:admin@jsx.jp; ruf=mailto:admin@jsx.jp; adkim=s; aspf=s
+txt jsx.jp._report._dmarc v=DMARC1
