@@ -1,61 +1,66 @@
-a @ 52.204.78.9
-cname * @
-
-a us 52.204.78.9
+# a @ 52.73.241.101
+a @ 76.76.21.22
+txt @ google-site-verification=KHG-j4sm6190un5bYPiw-q7a0O3HhzTrRWvDsGRoA28
+a * 52.73.241.101
+a cms 142.250.207.99
+a asia 3.113.227.199
+cname *.asia asia
+cname smtp smtp.mail.eu-west-1.awsapps.com.
+a us 52.73.241.101
 cname *.us us
-
-a proxy 172.16.6.22
-cname *.proxy proxy
-
-a in 172.16.6.121
-cname *.in in
-
-a a 127.0.0.1
-cname *.a a
-
-a os 13.113.105.26
-cname *.os os
-
 a jp 34.97.110.212
 cname *.jp jp
-
-a red 160.16.151.146
-cname *.red red
-
+###
+### local
+###
+a proxy 172.16.6.22
+cname *.proxy proxy
+a in 172.16.6.25
+cname *.in in
+a kali 172.16.6.33
+cname *.kali kali
+a mac 172.16.6.88
+cname *.mac mac
+a win 172.16.6.99
+cname *.win win
+a a 127.0.0.1
+cname *.a a
+a mac-book 172.16.170.200
+cname *.mac-book mac-book
+###
+### aws
+###
+cname dev d-9jroed8vej.execute-api.us-east-1.amazonaws.com.
+cname site d-wodapiq4g4.execute-api.us-east-1.amazonaws.com.
+cname zipcode d-2kyky88zhh.execute-api.us-east-1.amazonaws.com.
+cname _1fd5328bc5c13a939dba610a51da973c _438a92f5d77e2cbbbf6c10132f1fc353.hcnplcfwms.acm-validations.aws.
+###
+### regale
+###
+a regale 110.4.133.233
+###
+### Deta Space Vercel
+###
+a space 76.223.55.44
+txt _deta.space deta-verification=GlGbTVNsl7_xqqSpIic_IOfUH-X8cxk4ceuYIHgnnRg
+txt _deta deta-verification=fqSXBv_AMgTtSujb5wgDm45H_Lsb5mFaoa7BCacy3RM
 a deta 76.223.55.44
 a deta 75.2.69.226
-
+###
+### GitHub Pages
+###
 cname cdn jobscale.github.io.
 cname *.cdn cdn
-
 ###
-### Mail Server (@jsx.jp)
+### AWS WorkMail (@jsx.jp)
 ###
-a m 160.16.151.146
-cname *.m m
-
-# DNS MX entry
-mx m 1
-mx mx1.m 10
-mx mx2.m 20
-mx mx3.m 30
-
-# DNS SPF entry
-txt @ v=spf1 mx a:m.jsx.jp ~all
-
-# DNS TLSA entry
-tlsa _25._tcp.m 2 1 1 0b9fa5a59eed715c26c1020c711b4f6ec42d58b0015e14337a39dad301c5afc3
-
-# DNS client auto-configuration (RFC6186) entries
-srv _submission._tcp 1 1 587 m.jsx.jp.
-srv _imap._tcp 1 1 143 m.jsx.jp.
-srv _pop3._tcp 1 1 110 m.jsx.jp.
-srv _imaps._tcp 1 1 993 m.jsx.jp.
-srv _pop3s._tcp 1 1 995 m.jsx.jp.
-
-# DNS DKIM entry
-txt dkim._domainkey v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyRXce6iQEIN6o9bazbqWAvyM8XtoSnom5IOhgaDZ4Shs0VT7n18Tuq247f0bftjZ6CP/Asi7U2xRgEhvon/xA4uh7+0Hl1BRFnJZs7C7E2/g1a2z/yIH4qa90lQauAA4DqeXbyHjg7BAjrF/XnuaG011uK9j1aT0uN2qNcaVwEcb2eOkjtTeX1fiCKr7 tm/xW1cX+54iG3s4f2RxA/LMwF46MCqj9/n6t3VGkWuCyJ30a3Vun2MlFitAjMka3P9xQNA84IkWt+CavFzktwS5Tcng8nTkOmlwbfmN/BSkyb5mAotWoWFWN0+CvYOjIkgHdviguB13cnSV1IHiJ0Q+SwIDAQAB
-
-# DNS DMARC entry
-txt _dmarc v=DMARC1; p=reject; rua=mailto:admin@jsx.jp; ruf=mailto:admin@jsx.jp; adkim=s; aspf=s
-txt jsx.jp._report._dmarc v=DMARC1
+txt _amazonses eb+1zd7JLzYmmZ4JxljcSktZ3WcYXJj1+5QgN06saME=
+mx inbound-smtp.eu-west-1.amazonaws.com. 10
+cname autodiscover autodiscover.mail.eu-west-1.awsapps.com.
+cname jqx3m5iebj2dgd2cl5hj3lhaclpwruxx._domainkey jqx3m5iebj2dgd2cl5hj3lhaclpwruxx.dkim.amazonses.com.
+cname eeggmzrt32vhsci4lpgyfk42gcvslw5z._domainkey eeggmzrt32vhsci4lpgyfk42gcvslw5z.dkim.amazonses.com.
+cname bw2ugpd46cl73lm3reakofsp3iayujce._domainkey bw2ugpd46cl73lm3reakofsp3iayujce.dkim.amazonses.com.
+txt @ v=spf1 include:amazonses.com ~all
+txt _dmarc v=DMARC1;p=quarantine;pct=100;fo=1
+mx feedback-smtp.eu-west-1.amazonses.com. 10 mx.jsx.jp
+txt mx v=spf1 include:amazonses.com ~all
