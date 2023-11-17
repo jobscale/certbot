@@ -1,6 +1,6 @@
 ### example container
 ```
-git clone https://github.com/jobscale/certbot.git
+git clone git@github.com:jobscale/certbot.git
 cd certbot
 main() {
   docker build . -t local/certbot
