@@ -23,8 +23,10 @@ main() {
     -d *.a.jsx.jp \
     -d *.c.jsx.jp \
     -d *.e.jsx.jp \
+    -d *.i.jsx.jp \
     -d *.o.jsx.jp \
     -d *.s.jsx.jp \
+    -d *.u.jsx.jp \
     -d *.x.jsx.jp \
     --preferred-challenges dns --register-unsafely-without-email \
     --agree-tos | tee dns-txt
