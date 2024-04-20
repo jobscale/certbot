@@ -1,10 +1,16 @@
 txt @ google-site-verification=KHG-j4sm6190un5bYPiw-q7a0O3HhzTrRWvDsGRoA28
 a @ 76.76.21.22
 a @ 76.76.21.21
-a us 54.236.4.18
+a us 54.152.14.206
 cname *.us us
 cname * us
-a cms 142.250.207.99
+
+##
+## Render
+##
+cname site web-tkl4.onrender.com.
+cname wetty wetty.onrender.com.
+
 a jp 34.97.110.212
 cname *.jp jp
 
@@ -13,6 +19,9 @@ cname *.jp jp
 ###
 a proxy 172.16.6.22
 cname *.proxy proxy
+a x 172.16.6.22
+cname *.x x
+a lo-stack.x 172.16.6.30
 a in 172.16.6.25
 cname *.in in
 a kali 172.16.6.33
@@ -27,31 +36,32 @@ a mac-book 172.16.170.200
 cname *.mac-book mac-book
 
 ###
-### aws
-###
-cname dev d-9jroed8vej.execute-api.us-east-1.amazonaws.com.
-cname site d-wodapiq4g4.execute-api.us-east-1.amazonaws.com.
-cname zipcode d-2kyky88zhh.execute-api.us-east-1.amazonaws.com.
-
-###
 ### regale
 ###
 a regale 110.4.133.233
 
 ###
-### Deta Space Vercel
-###
-a space 76.223.55.44
-txt _deta.space deta-verification=GlGbTVNsl7_xqqSpIic_IOfUH-X8cxk4ceuYIHgnnRg
-txt _deta deta-verification=fqSXBv_AMgTtSujb5wgDm45H_Lsb5mFaoa7BCacy3RM
-a deta 76.223.55.44
-a deta 75.2.69.226
-
-###
 ### GitHub Pages
 ###
 cname cdn jobscale.github.io.
-cname *.cdn cdn
+cname mqtt.cdn jobscale.github.io.
+cname chat-mqtt-cool.cdn jobscale.github.io.
+cname clock.cdn jobscale.github.io.
+cname fake.cdn jobscale.github.io.
+cname site.cdn jobscale.github.io.
+cname lineage.cdn jobscale.github.io.
+cname maintenance.cdn jobscale.github.io.
+cname timer.cdn jobscale.github.io.
+cname snow.cdn jobscale.github.io.
+cname tetris.cdn jobscale.github.io.
+cname todo.cdn jobscale.github.io.
+cname todo-vue.cdn jobscale.github.io.
+cname totp.cdn jobscale.github.io.
+cname site.cdn jobscale.github.io.
+cname paycard.cdn jobscale.github.io.
+# spam
+a web.cdn 127.0.0.53
+a cms 142.250.207.99
 
 ###
 ### AWS WorkMail (@jsx.jp)
