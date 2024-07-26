@@ -1,6 +1,6 @@
 const { logger } = require('@jobscale/logger');
 
-const { ENV } = process.env;
+const { ENV, CERTBOT_DOMAIN, CERTBOT_VALIDATION } = process.env;
 
 const CIA = {
   dev: 'ICAKeyJkb21haW4iOiJqc3guanAiLCJ1cmwiOiJodHRwczovL2R5bi52YWx1ZS1kb21haW4uY29tL2NnaS1iaW4vZHluLmZjZyIsInRva2VuIjoib21vaWNvbWkiLCJob3N0cyI6WyJhc2lhIl19',
@@ -40,8 +40,16 @@ class App {
   }
 
   async setAddress(ip, env) {
-    logger.info(`Dynamic DNS polling. - ${ENV}`);
+    logger.info(`Dynamic DNS polling. - ${ENV} ${ip}`);
     const { domain, url, token } = env;
+    if (CERTBOT_DOMAIN && CERTBOT_VALIDATION) {
+      const host = CERTBOT_DOMAIN.replace(/\.jsx\.jp$/, '');
+      await this.dynamic({
+        domain, url, token, host, ip: CERTBOT_VALIDATION, retry: 3,
+      })
+      .catch(e => logger.error({ message: e.toString() }));
+      return 'dynamic';
+    }
     for (const host of env.hosts) {
       await this.dynamic({
         domain, url, token, host, ip, retry: 3,

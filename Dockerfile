@@ -11,5 +11,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY package.json .
 RUN npm i --dev=omit
 COPY app app
+COPY ddns.sh .
 COPY certonly .
 COPY simple .

@@ -1,16 +1,25 @@
 txt @ google-site-verification=KHG-j4sm6190un5bYPiw-q7a0O3HhzTrRWvDsGRoA28
-a @ 76.76.21.22
-a @ 76.76.21.21
-a us 54.152.14.206
+# a @ 76.76.21.22
+# a @ 76.76.21.21
+a @ 216.24.57.4
+
+##
+a us 52.55.60.70
 cname *.us us
 cname * us
+a black 153.120.92.184
 
 ##
 ## Render
 ##
 cname site web-tkl4.onrender.com.
-cname wetty wetty.onrender.com.
-
+# cname wetty wetty.onrender.com.
+cname web web-tkl4.onrender.com.
+cname web.cdn web-tkl4.onrender.com.
+##
+## Cloud
+##
+a vpn 54.198.98.110
 a jp 34.97.110.212
 cname *.jp jp
 
@@ -19,9 +28,12 @@ cname *.jp jp
 ###
 a proxy 172.16.6.22
 cname *.proxy proxy
+a ldap 172.16.6.103
+cname *.ldap ldap
+a smb 172.16.6.103
+cname *.smb smb
 a x 172.16.6.22
 cname *.x x
-a lo-stack.x 172.16.6.30
 a in 172.16.6.25
 cname *.in in
 a kali 172.16.6.33
@@ -30,6 +42,8 @@ a mac 172.16.6.88
 cname *.mac mac
 a win 172.16.6.99
 cname *.win win
+a mac-in 172.16.176.11
+cname *.mac-in mac-in
 a a 127.0.0.1
 cname *.a a
 a mac-book 172.16.170.200
@@ -59,6 +73,8 @@ cname todo-vue.cdn jobscale.github.io.
 cname totp.cdn jobscale.github.io.
 cname site.cdn jobscale.github.io.
 cname paycard.cdn jobscale.github.io.
+cname doom.cdn jobscale.github.io.
+
 # spam
 a web.cdn 127.0.0.53
 a cms 142.250.207.99
