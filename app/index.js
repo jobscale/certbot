@@ -67,8 +67,12 @@ class App {
     const record = { Name: host, Type, RData, TTL: 120 };
     if (CERTBOT_AUTH === 'true') records.push(record);
     const data = await this.putDNSRecords(env, { ...zone, ResourceRecordSets: records });
-    logger.info({ ...record, Success: data.Success });
-    return 'dynamic';
+    if (CERTBOT_AUTH === 'true') {
+      logger.info({ ...record, Success: data.Success });
+      return 'certbot auth';
+    }
+    logger.info({ Name: record.Name, Success: data.Success });
+    return 'certbot cleanup';
   }
 
   async getDNSZones(env) {
