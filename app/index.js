@@ -3,7 +3,7 @@ const { logger } = require('@jobscale/logger');
 
 const {
   ENV, CERTBOT_DOMAIN, CERTBOT_VALIDATION,
-  CERTBOT_AUTH_HOOK, CERTBOT_CLEANUP_HOOK,
+  CERTBOT_REMAINING_CHALLENGES,
 } = process.env;
 
 const ZONE = 'is1a';
@@ -57,8 +57,8 @@ class App {
 
   async setRecord(ip, env) {
     const Type = 'TXT';
-    logger.info(`Dynamic DNS polling. - [${ENV}] ${ip}`);
-    if (!CERTBOT_AUTH_HOOK || !CERTBOT_CLEANUP_HOOK) return 'ng';
+    logger.info(`Dynamic DNS polling. - [${ENV}] ${ip} (${CERTBOT_REMAINING_CHALLENGES})`);
+    if (Number.parseInt(CERTBOT_REMAINING_CHALLENGES, 10) <= 0) return 'ng';
     const zone = await this.getDNSRecords(env, 'jsx.jp');
     const host = CERTBOT_DOMAIN.replace(/\.jsx\.jp$/, '');
     const RData = CERTBOT_VALIDATION;

@@ -2,7 +2,7 @@
 set -eu
 
 {
-  pwd
+  env | grep CERTBOT
   cd /root
   ENV=dev node app
 }
