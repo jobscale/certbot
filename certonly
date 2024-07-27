@@ -32,8 +32,7 @@ main() {
   --manual-auth-hook /root/ddns-hook-auth.sh \
   --preferred-challenges dns \
   --register-unsafely-without-email \
-  | tee dns-txt
-  # --agree-tos
+  --agree-tos | tee dns-txt
   # --manual-cleanup-hook /root/ddns-hook-cleanup.sh
   echo $?
   cd /etc/letsencrypt/live
