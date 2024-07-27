@@ -1,0 +1,108 @@
+; name server
+; ns1.gslb13.sakura.ne.jp
+; ns2.gslb13.sakura.ne.jp
+
+; Zone: jsx.jp
+$ORIGIN jsx.jp.
+$TTL 120
+
+@  120  IN  TXT  google-site-verification=KHG-j4sm6190un5bYPiw-q7a0O3HhzTrRWvDsGRoA28
+; @  120  IN  A  76.76.21.22
+; @  120  IN  A  76.76.21.21
+@  120  IN  A  216.24.57.4
+
+;;
+;; Static
+;;
+us  120  IN  A  52.55.60.70
+*.us  120  IN  CNAME  us.jsx.jp.
+*  120  IN  CNAME  us.jsx.jp.
+black  120  IN  A  153.120.92.184
+
+;;
+;; Render
+;;
+site  120  IN  CNAME  web-tkl4.onrender.com.
+; cname wetty wetty.onrender.com.
+web  120  IN  CNAME  web-tkl4.onrender.com.
+web.cdn  120  IN  CNAME  web-tkl4.onrender.com.
+
+;;
+;; Cloud
+;;
+vpn  120  IN  A  54.198.98.110
+jp  120  IN  A  34.97.110.212
+*.jp  120  IN  CNAME  jp.jsx.jp.
+
+;;;
+;;; Local
+;;;
+proxy  120  IN  A  172.16.6.22
+*.proxy  120  IN  CNAME  proxy.jsx.jp.
+ldap  120  IN  A  172.16.6.103
+*.ldap  120  IN  CNAME  ldap.jsx.jp.
+smb  120  IN  A  172.16.6.103
+*.smb  120  IN  CNAME  smb.jsx.jp.
+x  120  IN  A  172.16.6.22
+*.x  120  IN  CNAME  x.jsx.jp.
+in  120  IN  A  172.16.6.25
+*.in  120  IN  CNAME  in.jsx.jp.
+kali  120  IN  A  172.16.6.33
+*.kali  120  IN  CNAME  kali.jsx.jp.
+mac  120  IN  A  172.16.6.88
+*.mac  120  IN  CNAME  mac.jsx.jp.
+win  120  IN  A  172.16.6.99
+*.win  120  IN  CNAME  win.jsx.jp.
+mac-in  120  IN  A  172.16.176.11
+*.mac-in  120  IN  CNAME  mac-in.jsx.jp.
+a  120  IN  A  127.0.0.1
+*.a  120  IN  CNAME  a.jsx.jp.
+mac-book  120  IN  A  172.16.170.200
+*.mac-book  120  IN  CNAME  mac-book.jsx.jp.
+
+;;;
+;;; regale
+;;;
+regale  120  IN  A  110.4.133.233
+
+;;;
+;;; GitHub Pages
+;;;
+cdn  120  IN  CNAME  jobscale.github.io.
+mqtt.cdn  120  IN  CNAME  jobscale.github.io.
+chat-mqtt-cool.cdn  120  IN  CNAME  jobscale.github.io.
+clock.cdn  120  IN  CNAME  jobscale.github.io.
+fake.cdn  120  IN  CNAME  jobscale.github.io.
+site.cdn  120  IN  CNAME  jobscale.github.io.
+lineage.cdn  120  IN  CNAME  jobscale.github.io.
+maintenance.cdn  120  IN  CNAME  jobscale.github.io.
+timer.cdn  120  IN  CNAME  jobscale.github.io.
+snow.cdn  120  IN  CNAME  jobscale.github.io.
+tetris.cdn  120  IN  CNAME  jobscale.github.io.
+todo.cdn  120  IN  CNAME  jobscale.github.io.
+todo-vue.cdn  120  IN  CNAME  jobscale.github.io.
+totp.cdn  120  IN  CNAME  jobscale.github.io.
+paycard.cdn  120  IN  CNAME  jobscale.github.io.
+doom.cdn  120  IN  CNAME  jobscale.github.io.
+
+;;;
+;;; spam
+;;;
+cms  120  IN  A  142.250.207.99
+
+;;;
+;;; AWS WorkMail (@jsx.jp)
+;;;
+smtp  120  IN  CNAME  smtp.mail.eu-west-1.awsapps.com.
+_amazonses  120  IN  TXT  WkZCKwjSvJWMVtrRtWuIeN9xifWHWJ6AzTZ8eSAm3P4=
+@  120  IN  MX  10  inbound-smtp.us-east-1.amazonaws.com.
+autodiscover  120  IN  CNAME  autodiscover.mail.us-east-1.awsapps.com.
+s33niunl3lyctyclvmyaa6mte4clu4vp._domainkey  120  IN  CNAME  s33niunl3lyctyclvmyaa6mte4clu4vp.dkim.amazonses.com.
+axtjmlmzc3btrl7qvobiwfwpcsd5gqtg._domainkey  120  IN  CNAME  axtjmlmzc3btrl7qvobiwfwpcsd5gqtg.dkim.amazonses.com.
+bkaqzfa4bdbj2jcamqvcmarjvszz3an2._domainkey  120  IN  CNAME  bkaqzfa4bdbj2jcamqvcmarjvszz3an2.dkim.amazonses.com.
+@  120  IN  TXT  "v=spf1 include:amazonses.com ~all"
+_dmarc  120  IN  TXT  "v=DMARC1;p=quarantine;pct=100;fo=1"
+mx  120  IN  MX  10  feedback-smtp.eu-west-1.amazonses.com.
+mx  120  IN  TXT  "v=spf1 include:amazonses.com ~all"
+
+;;;

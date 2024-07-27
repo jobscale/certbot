@@ -1,11 +1,13 @@
+const fs = require('fs');
 const { logger } = require('@jobscale/logger');
 
-const { ENV, CERTBOT_DOMAIN, CERTBOT_VALIDATION } = process.env;
+const {
+  ENV, CERTBOT_DOMAIN, CERTBOT_VALIDATION,
+  CERTBOT_AUTH_HOOK, CERTBOT_CLEANUP_HOOK,
+} = process.env;
 
-const CIA = {
-  dev: 'ICAKeyJkb21haW4iOiJqc3guanAiLCJ1cmwiOiJodHRwczovL2R5bi52YWx1ZS1kb21haW4uY29tL2NnaS1iaW4vZHluLmZjZyIsInRva2VuIjoib21vaWNvbWkiLCJob3N0cyI6WyJhc2lhIl19',
-  prod: 'IAp7ImRvbWFpbiI6ImpzeC5qcCIsInVybCI6Imh0dHBzOi8vZHluLnZhbHVlLWRvbWFpbi5jb20vY2dpLWJpbi9keW4uZmNnIiwidG9rZW4iOiJvbW9pY29taSIsImhvc3RzIjpbInVzIl19',
-}[ENV] || {};
+const ZONE = 'is1a';
+const API = `https://secure.sakura.ad.jp/cloud/zone/${ZONE}/api/cloud/1.1`;
 
 class App {
   async allowInsecure(use) {
@@ -24,7 +26,21 @@ class App {
     .then(() => fetch(...request))
     .then(res => this.allowInsecure(false) && res)
     .then(res => res.json())
-    .catch(() => JSON.parse(Buffer.from(CIA, 'base64').toString()));
+    .catch(() => {
+      const CIA = fs.readFileSync('../partner/sakura-cloud');
+      const toml = Buffer.from(CIA.toString(), 'base64').toString();
+      const env = {};
+      toml.split('\n').map(row => row.split('='))
+      .forEach(([key, value]) => {
+        if (!key) return;
+        env[key] = value;
+      });
+      return {
+        accessToken: env.SAKURACLOUD_ACCESS_TOKEN,
+        accessTokenSecret: env.SAKURACLOUD_ACCESS_TOKEN_SECRET,
+        zone: env.SAKURACLOUD_ZONE,
+      };
+    });
   }
 
   fetchIP() {
@@ -39,47 +55,90 @@ class App {
     );
   }
 
-  async setAddress(ip, env) {
-    logger.info(`Dynamic DNS polling. - ${ENV} ${ip}`);
-    const { domain, url, token } = env;
-    if (CERTBOT_DOMAIN && CERTBOT_VALIDATION) {
-      const host = CERTBOT_DOMAIN.replace(/\.jsx\.jp$/, '');
-      await this.dynamic({
-        domain, url, token, host, ip: CERTBOT_VALIDATION, retry: 3,
-      })
-      .catch(e => logger.error({ message: e.toString() }));
-      return 'dynamic';
-    }
-    for (const host of env.hosts) {
-      await this.dynamic({
-        domain, url, token, host, ip, retry: 3,
-      })
-      .catch(e => logger.error({ message: e.toString() }));
-    }
-    return 'ok';
+  async setRecord(ip, env) {
+    const Type = 'TXT';
+    logger.info(`Dynamic DNS polling. - [${ENV}] ${ip}`);
+    if (!CERTBOT_AUTH_HOOK || !CERTBOT_CLEANUP_HOOK) return 'ng';
+    const zone = await this.getDNSRecords(env, 'jsx.jp');
+    const host = CERTBOT_DOMAIN.replace(/\.jsx\.jp$/, '');
+    const RData = CERTBOT_VALIDATION;
+    const records = zone.ResourceRecordSets.filter(
+      item => item.Type !== Type || item.Name !== host,
+    );
+    records.push({ Name: host, Type, RData, TTL: 120 });
+    this.putDNSRecords(env, { ...zone, ResourceRecordSets: records });
+    return 'dynamic';
   }
 
-  dynamic({ domain, url, token, host, ip, retry }) {
-    const path = `${url}?d=${domain}&p=${token}&h=${host}&i=${ip}`;
-    return fetch(path, { method: 'GET' })
-    .then(res => res.text())
-    .then(text => {
-      const status = text.replace(/[\s]+/g, ' ').trim();
-      return { updated: `${ip} - ${status} - ${host}.${domain}`, status };
-    })
-    .then(res => {
-      logger.info(JSON.stringify(res));
-      if (res.status === 'status=0 OK' || !retry) return res;
-      return this.waiter(6600)
-      .then(() => this.dynamic({
-        domain, url, token, host, ip, retry: retry - 1,
-      }));
+  async getDNSZones(env) {
+    const url = `${API}/commonserviceitem`;
+    const { accessToken, accessTokenSecret } = env;
+    const Authorization = `Basic ${Buffer.from(`${accessToken}:${accessTokenSecret}`).toString('base64')}`;
+    const response = await fetch(url, {
+      headers: { Authorization },
     });
+    if (!response.ok) {
+      throw new Error(`fetching DNS zones: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+    const zones = data.CommonServiceItems
+    .filter(item => item.ServiceClass === 'cloud/dns')
+    .map(item => ({
+      ID: item.ID,
+      Name: item.Name,
+    }));
+    return zones;
+  }
+
+  async getDNSRecords(env, zoneName) {
+    const url = `${API}/commonserviceitem`;
+    const { accessToken, accessTokenSecret } = env;
+    const Authorization = `Basic ${Buffer.from(`${accessToken}:${accessTokenSecret}`).toString('base64')}`;
+    const response = await fetch(url, {
+      headers: { Authorization },
+    });
+    if (!response.ok) {
+      throw new Error(`fetching DNS records: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+    const [zone] = data.CommonServiceItems
+    .filter(item => item.ServiceClass === 'cloud/dns' && item.Name === zoneName)
+    .map(item => ({
+      ID: item.ID,
+      Name: item.Name,
+      ResourceRecordSets: item.Settings.DNS.ResourceRecordSets,
+    }));
+    return zone;
+  }
+
+  async putDNSRecords(env, zone) {
+    const url = `${API}/commonserviceitem/${zone.ID}`;
+    const { accessToken, accessTokenSecret } = env;
+    const Authorization = `Basic ${Buffer.from(`${accessToken}:${accessTokenSecret}`).toString('base64')}`;
+    const payload = {
+      CommonServiceItem: {
+        Settings: {
+          DNS: {
+            ResourceRecordSets: zone.ResourceRecordSets,
+          },
+        },
+      },
+    };
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: { Authorization, 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+      throw new Error(`update DNS records: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data;
   }
 
   main() {
     return Promise.all([this.fetchIP(), this.fetchEnv()])
-    .then(data => this.setAddress(...data));
+    .then(data => this.setRecord(...data));
   }
 
   start() {

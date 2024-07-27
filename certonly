@@ -28,6 +28,8 @@ main() {
     -d *.s.jsx.jp \
     -d *.u.jsx.jp \
     -d *.x.jsx.jp \
+    --manual-auth-hook /root/ddns-hook.sh \
+    --manual-cleanup-hook /root/ddns-hook.sh \
     --preferred-challenges dns --register-unsafely-without-email \
     --agree-tos | tee dns-txt
   cd /etc/letsencrypt/live
