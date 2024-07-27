@@ -3,6 +3,6 @@ set -eu
 
 {
   env | grep CERTBOT
-  CERTBOT_CLEANUP=true CERTBOT_VALIDATION=_acme-challenge.${CERTBOT_VALIDATION} \
+  CERTBOT_CLEANUP=true CERTBOT_DOMAIN=_acme-challenge.${CERTBOT_DOMAIN} \
   ENV=dev node app
 }
