@@ -28,11 +28,14 @@ main() {
   -d *.s.jsx.jp \
   -d *.u.jsx.jp \
   -d *.x.jsx.jp \
+  --manual \
   --manual-auth-hook /root/ddns-hook-auth.sh \
-  --preferred-challenges dns --register-unsafely-without-email \
-  --agree-tos | tee dns-txt
-  # --manual
+  --preferred-challenges dns \
+  --register-unsafely-without-email \
+  | tee dns-txt
+  # --agree-tos
   # --manual-cleanup-hook /root/ddns-hook-cleanup.sh
+  echo $?
   cd /etc/letsencrypt/live
   zip -r /root/tls *
   echo "Created - $(ls -lh /root/tls.zip)"

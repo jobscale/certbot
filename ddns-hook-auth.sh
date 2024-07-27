@@ -3,7 +3,7 @@ set -eu
 
 dig-all() {
   sleep 60
-  for domain in $(echo $CERTBOT_ALL_DOMAINS | sed -e 's/,/ /g' | sort | uniq)
+  for domain in $(echo $CERTBOT_ALL_DOMAINS | sed -e 's/,/\n/g' | sort | uniq)
   do
     dig _acme-challenge.${domain} txt | grep -A 2 'ANSWER SECTION' | grep -w 'TXT'
   done
