@@ -3,11 +3,12 @@ set -eu
 
 dig-all() {
   echo
-  for i in {30..1}
+  for i in {10..1}
   do
     echo -n "$i .. "
     sleep 10
   done
+  echo
   for domain in $(echo $CERTBOT_ALL_DOMAINS | sed -e 's/,/\n/g' | sort | uniq)
   do
     dig _acme-challenge.${domain} txt | grep -A 2 'ANSWER SECTION' | grep -w 'TXT'
