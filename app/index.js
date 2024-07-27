@@ -65,8 +65,10 @@ class App {
     const records = zone.ResourceRecordSets.filter(
       item => item.Type !== Type || item.Name !== host,
     );
-    records.push({ Name: host, Type, RData, TTL: 120 });
-    this.putDNSRecords(env, { ...zone, ResourceRecordSets: records });
+    const record = { Name: host, Type, RData, TTL: 120 };
+    records.push(record);
+    const data = await this.putDNSRecords(env, { ...zone, ResourceRecordSets: records });
+    logger.info({ ...record, Success: data.Success });
     return 'dynamic';
   }
 
@@ -145,7 +147,8 @@ class App {
     const ts = new Date();
     logger.info({ ts: ts.getTime(), now: ts.toISOString() });
     this.main()
-    .catch(e => logger.error({ message: e.toString() }));
+    .then(message => logger.info({ message }))
+    .catch(e => logger.error(e));
   }
 }
 
