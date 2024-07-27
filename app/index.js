@@ -58,7 +58,6 @@ class App {
   async setRecord(ip, env) {
     const Type = 'TXT';
     logger.info(`Dynamic DNS polling. - [${ENV}] ${ip} (${CERTBOT_REMAINING_CHALLENGES})`);
-    if (Number.parseInt(CERTBOT_REMAINING_CHALLENGES, 10) <= 0) return 'ng';
     const zone = await this.getDNSRecords(env, 'jsx.jp');
     const host = CERTBOT_DOMAIN.replace(/jsx\.jp$/, '').replace(/\.$/, '');
     const RData = CERTBOT_VALIDATION;
