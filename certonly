@@ -2,36 +2,37 @@
 set -eu
 
 main() {
-  certbot --rsa-key-size 4096 --no-bootstrap certonly --manual \
-    -d jsx.jp \
-    -d *.jsx.jp \
-    -d *.api.jsx.jp \
-    -d *.out.jsx.jp \
-    -d *.one.jsx.jp \
-    -d *.ae.jsx.jp \
-    -d *.co.jsx.jp \
-    -d *.me.jsx.jp \
-    -d *.ne.jsx.jp \
-    -d *.jp.jsx.jp \
-    -d *.us.jsx.jp \
-    -d *.eu.jsx.jp \
-    -d *.fr.jsx.jp \
-    -d *.cn.jsx.jp \
-    -d *.os.jsx.jp \
-    -d *.in.jsx.jp \
-    -d *.io.jsx.jp \
-    -d *.a.jsx.jp \
-    -d *.c.jsx.jp \
-    -d *.e.jsx.jp \
-    -d *.i.jsx.jp \
-    -d *.o.jsx.jp \
-    -d *.s.jsx.jp \
-    -d *.u.jsx.jp \
-    -d *.x.jsx.jp \
-    --manual-auth-hook /root/ddns-hook-auth.sh \
-    --manual-cleanup-hook /root/ddns-hook-cleanup.sh \
-    --preferred-challenges dns --register-unsafely-without-email \
-    --agree-tos | tee dns-txt
+  certbot --rsa-key-size 4096 --no-bootstrap certonly \
+  -d jsx.jp \
+  -d *.jsx.jp \
+  -d *.api.jsx.jp \
+  -d *.out.jsx.jp \
+  -d *.one.jsx.jp \
+  -d *.ae.jsx.jp \
+  -d *.co.jsx.jp \
+  -d *.me.jsx.jp \
+  -d *.ne.jsx.jp \
+  -d *.jp.jsx.jp \
+  -d *.us.jsx.jp \
+  -d *.eu.jsx.jp \
+  -d *.fr.jsx.jp \
+  -d *.cn.jsx.jp \
+  -d *.os.jsx.jp \
+  -d *.in.jsx.jp \
+  -d *.io.jsx.jp \
+  -d *.a.jsx.jp \
+  -d *.c.jsx.jp \
+  -d *.e.jsx.jp \
+  -d *.i.jsx.jp \
+  -d *.o.jsx.jp \
+  -d *.s.jsx.jp \
+  -d *.u.jsx.jp \
+  -d *.x.jsx.jp \
+  --manual-auth-hook /root/ddns-hook-auth.sh \
+  --preferred-challenges dns --register-unsafely-without-email \
+  --agree-tos | tee dns-txt
+  # --manual
+  # --manual-cleanup-hook /root/ddns-hook-cleanup.sh
   cd /etc/letsencrypt/live
   zip -r /root/tls *
   echo "Created - $(ls -lh /root/tls.zip)"

@@ -59,7 +59,7 @@ class App {
     const Type = 'TXT';
     logger.info(`Dynamic DNS polling. - [${ENV}] ${ip} (${CERTBOT_REMAINING_CHALLENGES})`);
     const zone = await this.getDNSRecords(env, 'jsx.jp');
-    const host = CERTBOT_DOMAIN.replace(/jsx\.jp$/, '').replace(/\.$/, '');
+    const host = CERTBOT_DOMAIN.replace(/\.jsx\.jp$/, '');
     const RData = CERTBOT_VALIDATION;
     const records = zone.ResourceRecordSets.filter(
       item => item.Type !== Type || item.Name !== host,
