@@ -10,7 +10,7 @@ dig-all() {
     sleep 10
     echo -n "$i .. "
     ANSWER=$(
-      dig ${CHALLENGE} txt | grep -A 2 'ANSWER SECTION' | grep -w 'TXT' | grep "${CERTBOT_VALIDATION}" | wc -l
+      dig ${CHALLENGE} txt | grep -A 2 'ANSWER SECTION' | grep -w 'TXT' | grep -- "${CERTBOT_VALIDATION}" | wc -l
     )
     [[ "${ANSWER}" == "1" ]] && break
   done
@@ -35,7 +35,7 @@ time {
     do
       dig _acme-challenge.${domain} txt | grep -A 2 'ANSWER SECTION' | grep -w 'TXT'
     done
-    sleep 120
+    sleep 600
   }
   echo
 } | tee -a CHALLENGE.${CERTBOT_DOMAIN}.log
