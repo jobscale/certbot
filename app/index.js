@@ -21,9 +21,7 @@ class App {
       `${Host}/sakura-dns.env.json`,
       { method: 'GET', headers: { Cookie } },
     ];
-    return this.allowInsecure()
-    .then(() => fetch(...request))
-    .then(res => this.allowInsecure(false) && res)
+    return fetch(...request)
     .then(res => res.json())
     .catch(() => {
       const token = Number.parseInt(TOKEN, 10) || 0;

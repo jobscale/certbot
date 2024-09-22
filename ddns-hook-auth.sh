@@ -19,7 +19,8 @@ dig-all() {
   echo "[CERTBOT - AUTH] (${CERTBOT_REMAINING_CHALLENGES})"
   sleep 1.1
   env | grep CERTBOT
-  DOMAIN=_acme-challenge.${CERTBOT_DOMAIN} TOKEN=$(date +%s) \
+  SUB=$(echo "${CERTBOT_DOMAIN}" | sed -e 's/\.jsx\.jp$//')
+  DOMAIN=_acme-challenge.${SUB} TOKEN=$(date +%s) \
   TYPE=TXT R_DATA="${CERTBOT_VALIDATION}" \
   ENV=dev node app
   echo
