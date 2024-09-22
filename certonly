@@ -32,8 +32,8 @@ main() {
   --manual-auth-hook /root/ddns-hook-auth.sh \
   --preferred-challenges dns \
   --register-unsafely-without-email \
-  --agree-tos | tee dns-txt
-  # --manual-cleanup-hook /root/ddns-hook-cleanup.sh
+  --agree-tos \
+  --manual-cleanup-hook /root/ddns-hook-cleanup.sh | tee dns-txt
   echo $?
   cd /etc/letsencrypt/live
   zip -r /root/tls *

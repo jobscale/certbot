@@ -3,7 +3,7 @@ const { decode } = require('./js-proxy');
 
 const {
   ENV, DOMAIN, TOKEN, DNS_CONFIG,
-  TYPE, R_DATA, MULTIPLE,
+  TYPE, R_DATA, MULTIPLE, DELETE_ONLY,
 } = process.env;
 
 const ZONE = 'is1a';
@@ -70,7 +70,7 @@ class App {
       item => MULTIPLE || (item.Type !== Type || item.Name !== host),
     );
     const record = { Name: host, Type, RData: ip, TTL: 120 };
-    records.push(record);
+    if (!DELETE_ONLY) records.push(record);
     const data = await this.putDNSRecords(env, { ...zone, ResourceRecordSets: records });
     logger.info({ ...record, Success: data.Success });
     return 'ok';
@@ -86,7 +86,7 @@ class App {
       item => MULTIPLE || (item.Type !== Type || item.Name !== host),
     );
     const record = { Name: host, Type, RData, TTL: 120 };
-    records.push(record);
+    if (!DELETE_ONLY) records.push(record);
     const data = await this.putDNSRecords(env, { ...zone, ResourceRecordSets: records });
     logger.info({ ...record, Success: data.Success });
     return 'ok';
