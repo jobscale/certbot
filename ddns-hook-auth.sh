@@ -17,14 +17,15 @@ dig-all() {
 }
 
 {
-  echo "[CERTBOT - AUTH] (${CERTBOT_REMAINING_CHALLENGES})"
-  sleep 1.1
+  echo " === [CERTBOT - AUTH] (${CERTBOT_REMAINING_CHALLENGES}) ==="
   env | grep CERTBOT
-  SUB=$(echo "${CERTBOT_DOMAIN}" | sed -e 's/\.jsx\.jp$//')
-  DOMAIN=_acme-challenge.${SUB} TOKEN=$(date +%s) \
+  [[ "$CERTBOT_REMAINING_CHALLENGES" == "0" ]] && exit
+  CHALLENGE=_acme-challenge.${CERTBOT_DOMAIN}
+  SUB=$(echo "${CHALLENGE}" | sed -e 's/jsx\.jp$//') |  | sed -e 's/\.$//')
+  DOMAIN=${SUB} TOKEN=$(date +%s) \
   TYPE=TXT R_DATA="${CERTBOT_VALIDATION}" \
   ENV=dev node app
   echo
-  [[ "$CERTBOT_REMAINING_CHALLENGES" == "0" ]] && dig-all
+  dig-all
   echo
-}
+} | tee -a CHALLENGE.${CERTBOT_DOMAIN}.log
