@@ -4,22 +4,24 @@ set -eu
 dig-all() {
   CHALLENGE="$1"
   echo
-  echo "wait for DNS n seconds"
-  sleep 10
+  echo -n "wait for DNS n seconds - "
   for i in {10..1}
   do
-    echo -n "$i .. "
-    ANSWER=$(dig _acme-challenge.${domain} txt | grep -A 2 'ANSWER SECTION' | grep -w 'TXT' | grep "${CERTBOT_VALIDATION}" | wc -l)
-    [[ "${ANSWER}" == "1" ]] && break
     sleep 10
+    echo -n "$i .. "
+    ANSWER=$(
+      dig ${CHALLENGE} txt | grep -A 2 'ANSWER SECTION' | grep -w 'TXT' | grep "${CERTBOT_VALIDATION}" | wc -l
+    )
+    [[ "${ANSWER}" == "1" ]] && break
   done
   echo
 }
 
-{
-  echo " === [CERTBOT - AUTH] (${CERTBOT_REMAINING_CHALLENGES}) ==="
+time {
+  echo " $(TZ=Asia/Tokyo date -Iseconds) === [CERTBOT - AUTH] ${CERTBOT_DOMAIN} (${CERTBOT_REMAINING_CHALLENGES}) ==="
+  echo
   env | grep CERTBOT
-  [[ "$CERTBOT_REMAINING_CHALLENGES" == "0" ]] && exit
+  echo
   CHALLENGE=_acme-challenge.${CERTBOT_DOMAIN}
   SUB=$(echo "${CHALLENGE}" | sed -e 's/jsx\.jp$//' | sed -e 's/\.$//')
   DOMAIN=${SUB} TOKEN=$(date +%s) \
