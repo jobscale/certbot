@@ -30,4 +30,12 @@ time {
   echo
   dig-all "${CHALLENGE}"
   echo
+  [[ "${CERTBOT_REMAINING_CHALLENGES}" == "0" ]] && {
+    for domain in $(echo $CERTBOT_ALL_DOMAINS | sed -e 's/,/\n/g' | sort | uniq)
+    do
+      dig _acme-challenge.${domain} txt | grep -A 2 'ANSWER SECTION' | grep -w 'TXT'
+    done
+    sleep 120
+  }
+  echo
 } | tee -a CHALLENGE.${CERTBOT_DOMAIN}.log
