@@ -35,7 +35,7 @@ time {
     do
       dig _acme-challenge.${domain} txt | grep -A 2 'ANSWER SECTION' | grep -w 'TXT'
     done
-    sleep 600
+    sleep 120
   }
   echo
 } | tee -a CHALLENGE.${CERTBOT_DOMAIN}.log
