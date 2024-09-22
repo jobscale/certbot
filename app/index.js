@@ -1,14 +1,13 @@
-const fs = require('fs');
 const { logger } = require('@jobscale/logger');
+const { decode } = require('./js-proxy');
 
 const {
-  ENV, CERTBOT_DOMAIN, CERTBOT_VALIDATION,
-  CERTBOT_REMAINING_CHALLENGES, CERTBOT_AUTH,
+  ENV, DOMAIN, TOKEN, DNS_CONFIG,
+  TYPE, R_DATA,
 } = process.env;
 
 const ZONE = 'is1a';
 const API = `https://secure.sakura.ad.jp/cloud/zone/${ZONE}/api/cloud/1.1`;
-
 class App {
   async allowInsecure(use) {
     if (use === false) delete process.env.NODE_TLS_REJECT_UNAUTHORIZED;
@@ -19,7 +18,7 @@ class App {
     const Host = 'https://partner.credentials.svc.cluster.local';
     const Cookie = 'X-AUTH=X0X0X0X0X0X0X0X';
     const request = [
-      `${Host}/value-domain.env.json`,
+      `${Host}/sakura-dns.env.json`,
       { method: 'GET', headers: { Cookie } },
     ];
     return this.allowInsecure()
@@ -27,10 +26,18 @@ class App {
     .then(res => this.allowInsecure(false) && res)
     .then(res => res.json())
     .catch(() => {
-      const CIA = fs.readFileSync('../partner/sakura-cloud');
-      const toml = Buffer.from(CIA.toString(), 'base64').toString();
+      const token = Number.parseInt(TOKEN, 10) || 0;
+      const match = Math.floor(Date.now() / 1000);
+      if (Math.abs(match - token) > 5) throw new Error('mismatch token');
+      const config = JSON.parse(Buffer.from(
+        decode(DNS_CONFIG).split('').reverse().join(''),
+        'base64',
+      ).toString());
       const env = {};
-      toml.split('\n').map(row => row.split('='))
+      Buffer.from(
+        `${config.accessKeyId}${config.accessKey}${config.secretAccessKey}${config.accessKeyToken}`,
+        'base64',
+      ).toString().split('\n').map(item => item.split('='))
       .forEach(([key, value]) => {
         if (!key) return;
         env[key] = value;
@@ -55,24 +62,36 @@ class App {
     );
   }
 
-  async setRecord(ip, env) {
-    const Type = 'TXT';
-    logger.info(`Dynamic DNS polling. - [${ENV}] ${ip} (${CERTBOT_REMAINING_CHALLENGES})`);
+  async setAddress(ip, env) {
+    if (TYPE && R_DATA) return this.setDomainValue(ip, env);
+    const Type = 'A';
+    logger.info(`Dynamic DNS polling. - [${ENV}] ${ip} (${DOMAIN})`);
     const zone = await this.getDNSRecords(env, 'jsx.jp');
-    const host = CERTBOT_DOMAIN.replace(/\.jsx\.jp$/, '');
-    const RData = CERTBOT_VALIDATION;
+    const host = DOMAIN;
+    const records = zone.ResourceRecordSets.filter(
+      item => item.Type !== Type || item.Name !== host,
+    );
+    const record = { Name: host, Type, RData: ip, TTL: 120 };
+    records.push(record);
+    const data = await this.putDNSRecords(env, { ...zone, ResourceRecordSets: records });
+    logger.info({ ...record, Success: data.Success });
+    return 'ok';
+  }
+
+  async setDomainValue(ip, env) {
+    const Type = TYPE.toUpperCase();
+    const RData = R_DATA;
+    logger.info(`Dynamic DNS polling. - [${ENV}] ${ip} (${DOMAIN}) "${RData}"`);
+    const zone = await this.getDNSRecords(env, 'jsx.jp');
+    const host = DOMAIN;
     const records = zone.ResourceRecordSets.filter(
       item => item.Type !== Type || item.Name !== host,
     );
     const record = { Name: host, Type, RData, TTL: 120 };
-    if (CERTBOT_AUTH === 'true') records.push(record);
+    records.push(record);
     const data = await this.putDNSRecords(env, { ...zone, ResourceRecordSets: records });
-    if (CERTBOT_AUTH === 'true') {
-      logger.info({ ...record, Success: data.Success });
-      return 'certbot auth';
-    }
-    logger.info({ Name: record.Name, Success: data.Success });
-    return 'certbot cleanup';
+    logger.info({ ...record, Success: data.Success });
+    return 'ok';
   }
 
   async getDNSZones(env) {
@@ -143,7 +162,7 @@ class App {
 
   main() {
     return Promise.all([this.fetchIP(), this.fetchEnv()])
-    .then(data => this.setRecord(...data));
+    .then(data => this.setAddress(...data));
   }
 
   start() {
