@@ -3,10 +3,11 @@ set -eu
 
 dig-all() {
   echo
+  echo "wait for DNS 5 minutes"
   for i in {10..1}
   do
     echo -n "$i .. "
-    sleep 10
+    sleep 30
   done
   echo
   for domain in $(echo $CERTBOT_ALL_DOMAINS | sed -e 's/,/\n/g' | sort | uniq)
