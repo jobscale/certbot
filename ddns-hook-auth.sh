@@ -2,18 +2,18 @@
 set -eu
 
 dig-all() {
+  CHALLENGE="$1"
   echo
-  echo "wait for DNS 120 seconds"
+  echo "wait for DNS n seconds"
+  sleep 10
   for i in {10..1}
   do
     echo -n "$i .. "
-    sleep 12
+    ANSWER=$(dig _acme-challenge.${domain} txt | grep -A 2 'ANSWER SECTION' | grep -w 'TXT' | grep "${CERTBOT_VALIDATION}" | wc -l)
+    [[ "${ANSWER}" == "1" ]] && break
+    sleep 10
   done
   echo
-  for domain in $(echo $CERTBOT_ALL_DOMAINS | sed -e 's/,/\n/g' | sort | uniq)
-  do
-    dig _acme-challenge.${domain} txt | grep -A 2 'ANSWER SECTION' | grep -w 'TXT'
-  done
 }
 
 {
@@ -26,6 +26,6 @@ dig-all() {
   TYPE=TXT R_DATA="${CERTBOT_VALIDATION}" \
   ENV=dev node app
   echo
-  dig-all
+  dig-all "${CHALLENGE}"
   echo
 } | tee -a CHALLENGE.${CERTBOT_DOMAIN}.log
