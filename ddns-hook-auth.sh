@@ -19,7 +19,8 @@ dig-all() {
   echo "[CERTBOT - AUTH] (${CERTBOT_REMAINING_CHALLENGES})"
   sleep 1.1
   env | grep CERTBOT
-  CERTBOT_AUTH=true CERTBOT_DOMAIN=_acme-challenge.${CERTBOT_DOMAIN} \
+  DOMAIN=_acme-challenge.${CERTBOT_DOMAIN} TOKEN=$(date +%s) \
+  TYPE=TXT R_DATA="${CERTBOT_VALIDATION}" \
   ENV=dev node app
   echo
   [[ "$CERTBOT_REMAINING_CHALLENGES" == "0" ]] && dig-all
