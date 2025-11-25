@@ -1,5 +1,5 @@
-const { logger } = require('@jobscale/logger');
-const { decode } = require('./js-proxy');
+import { logger } from '@jobscale/logger';
+import { decode } from './js-proxy.jp';
 
 const {
   ENV, DOMAIN, TOKEN, DNS_CONFIG,

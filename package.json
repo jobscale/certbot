@@ -2,19 +2,24 @@
   "name": "certbot",
   "version": "0.0.1",
   "description": "certbot",
-  "main": "app/index.js",
-  "scripts": {
-    "start": "node app",
-    "lint": "eslint",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "keywords": [],
   "author": "",
   "license": "MIT",
+  "type": "module",
+  "main": "app/index.js",
+  "scripts": {
+    "start": "node app/index.js",
+    "lint": "eslint",
+    "test": "npm run lint"
+  },
+  "pre-commit": "test",
   "dependencies": {
     "@jobscale/logger": "^0.10.1"
   },
   "devDependencies": {
-    "eslint": "^9.39.1"
+    "@jobscale/eslint-plugin-standard": "^0.0.3",
+    "eslint": "^9.39.1",
+    "eslint-plugin-jest": "^29.2.1",
+    "pre-commit": "^1.2.2"
   }
 }

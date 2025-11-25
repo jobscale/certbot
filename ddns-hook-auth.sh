@@ -26,7 +26,7 @@ time {
   SUB=$(echo "${CHALLENGE}" | sed -e 's/jsx\.jp$//' | sed -e 's/\.$//')
   DOMAIN=${SUB} TOKEN=$(date +%s) \
   TYPE=TXT R_DATA="${CERTBOT_VALIDATION}" \
-  MULTIPLE=allow ENV=dev node app
+  MULTIPLE=allow ENV=dev node app/index.js
   echo
   dig-all "${CHALLENGE}"
   echo
