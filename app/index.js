@@ -1,5 +1,5 @@
 import { logger } from '@jobscale/logger';
-import { decode } from './js-proxy.jp';
+import { decode } from './js-proxy.js';
 
 const {
   ENV, DOMAIN, TOKEN, DNS_CONFIG,

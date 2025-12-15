@@ -36,8 +36,9 @@ main() {
   --manual-cleanup-hook /root/ddns-hook-cleanup.sh | tee dns-txt
   echo $?
   cd /etc/letsencrypt/live
-  zip -r /root/tls *
-  echo "Created - $(ls -lh /root/tls.zip)"
+  FILE="/root/tls-$(date +%Y%m%d)"
+  zip -r ${FILE} *
+  echo "Created - $(ls -lh ${FILE}.zip)"
 }
 
 main
