@@ -1,10 +1,12 @@
-import { logger } from '@jobscale/logger';
+import { createLogger } from '@jobscale/logger';
 import { decode } from './js-proxy.js';
 
 const {
-  ENV, DOMAIN, TOKEN, DNS_CONFIG,
-  TYPE, R_DATA, MULTIPLE, DELETE_ONLY,
+  ENV, LOG_LEVEL, DOMAIN, TOKEN, DNS_CONFIG,
+  TYPE, R_DATA, MULTIPLE, DELETE,
 } = process.env;
+
+const logger = createLogger(LOG_LEVEL);
 
 const ZONE = 'is1a';
 const API = `https://secure.sakura.ad.jp/cloud/zone/${ZONE}/api/cloud/1.1`;
@@ -21,10 +23,14 @@ class App {
       `${Host}/sakura-dns.env.json`,
       { method: 'GET', headers: { Cookie } },
     ];
-    return fetch(...request)
+    return this.allowInsecure()
+    .then(() => fetch(...request))
+    .then(res => this.allowInsecure(false) && res)
     .then(res => res.json())
     .catch(() => {
-      const token = Number.parseInt(TOKEN, 10) || 0;
+      const token = TOKEN === 'test' && ENV === 'dev'
+        ? Math.floor(Date.now() / 1000)
+        : Number.parseInt(TOKEN, 10) || 0;
       const match = Math.floor(Date.now() / 1000);
       if (Math.abs(match - token) > 5) throw new Error('mismatch token');
       const config = JSON.parse(Buffer.from(
@@ -54,41 +60,38 @@ class App {
     .then(res => res.split('\n')[0]);
   }
 
-  waiter(milliseconds) {
-    return new Promise(
-      resolve => { setTimeout(resolve, milliseconds); },
-    );
-  }
-
-  async setAddress(ip, env) {
-    if (TYPE && R_DATA) return this.setDomainValue(ip, env);
-    const Type = 'A';
-    logger.info(`Dynamic DNS polling. - [${ENV}] ${ip} (${DOMAIN})`);
-    const zone = await this.getDNSRecords(env, 'jsx.jp');
-    const host = DOMAIN;
-    const records = zone.ResourceRecordSets.filter(
-      item => MULTIPLE || (item.Type !== Type || item.Name !== host),
-    );
-    const record = { Name: host, Type, RData: ip, TTL: 120 };
-    if (!DELETE_ONLY) records.push(record);
-    const data = await this.putDNSRecords(env, { ...zone, ResourceRecordSets: records });
-    logger.info({ ...record, Success: data.Success });
-    return 'ok';
+  sort(records) {
+    return records.sort((a, b) => {
+      const [aName, bName] = [
+        a.Name.split('.').reverse().join('.'),
+        b.Name.split('.').reverse().join('.'),
+      ];
+      if (aName > bName) return 1;
+      if (aName < bName) return -1;
+      if (a.Type > b.Type) return 1;
+      if (a.Type < b.Type) return -1;
+      return 0;
+    });
   }
 
   async setDomainValue(ip, env) {
-    const Type = TYPE.toUpperCase();
-    const RData = R_DATA;
-    logger.info(`Dynamic DNS polling. - [${ENV}] ${ip} (${DOMAIN}) "${RData}"`);
-    const zone = await this.getDNSRecords(env, 'jsx.jp');
+    const Type = (TYPE || 'A').toUpperCase();
+    const RData = R_DATA || ip;
     const host = DOMAIN;
-    const records = zone.ResourceRecordSets.filter(
-      item => MULTIPLE || (item.Type !== Type || item.Name !== host),
-    );
     const record = { Name: host, Type, RData, TTL: 120 };
-    if (!DELETE_ONLY) records.push(record);
-    const data = await this.putDNSRecords(env, { ...zone, ResourceRecordSets: records });
-    logger.info({ ...record, Success: data.Success });
+    logger.info(`Dynamic DNS polling. - [${ENV}]`, JSON.stringify(record, null, 2));
+    const zone = await this.getDNSRecords(env, 'jsx.jp');
+    const records = zone.ResourceRecordSets.filter(item => {
+      if (MULTIPLE || item.Name !== host) return true;
+      if (DELETE || item.Type === Type) return false;
+      const diff = ['A', 'CNAME'];
+      return !(diff.includes(item.Type) && diff.includes(Type));
+    });
+    if (!DELETE) records.push(record);
+    const sorted = this.sort(records);
+    logger.debug(JSON.stringify(sorted));
+    const data = await this.putDNSRecords(env, { ...zone, ResourceRecordSets: sorted });
+    logger.info(JSON.stringify({ ...data, CommonServiceItem: undefined }, null, 2));
     return 'ok';
   }
 
@@ -160,7 +163,7 @@ class App {
 
   main() {
     return Promise.all([this.fetchIP(), this.fetchEnv()])
-    .then(data => this.setAddress(...data));
+    .then(data => this.setDomainValue(...data));
   }
 
   start() {
