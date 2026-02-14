@@ -2,7 +2,7 @@
 set -eu
 
 main() {
-  certbot --rsa-key-size 4096 --no-bootstrap certonly \
+  certbot certonly --key-type ecdsa --elliptic-curve secp384r1 \
   -d jsx.jp \
   -d *.jsx.jp \
   -d *.api.jsx.jp \
