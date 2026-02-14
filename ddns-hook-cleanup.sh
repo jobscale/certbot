@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eu
 
-time {
+cleanup() {
   echo " $(TZ=Asia/Tokyo date -Iseconds) === [CERTBOT - CLEANUP] ${CERTBOT_DOMAIN} (${CERTBOT_REMAINING_CHALLENGES}) ==="
   echo
   env | grep CERTBOT
@@ -12,4 +12,8 @@ time {
   TYPE=TXT R_DATA="${CERTBOT_VALIDATION}" \
   DELETE=allow ENV=dev node app/index.js
   echo
-} | tee -a CHALLENGE.${CERTBOT_DOMAIN}.log
+}
+
+{
+  cleanup | tee -a CHALLENGE.${CERTBOT_DOMAIN}.log
+}

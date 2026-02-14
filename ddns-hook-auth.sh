@@ -17,7 +17,7 @@ dig-all() {
   echo
 }
 
-time {
+auth() {
   echo " $(TZ=Asia/Tokyo date -Iseconds) === [CERTBOT - AUTH] ${CERTBOT_DOMAIN} (${CERTBOT_REMAINING_CHALLENGES}) ==="
   echo
   env | grep CERTBOT
@@ -38,4 +38,8 @@ time {
     sleep 120
   }
   echo
-} | tee -a CHALLENGE.${CERTBOT_DOMAIN}.log
+}
+
+{
+  auth | tee -a CHALLENGE.${CERTBOT_DOMAIN}.log
+}
