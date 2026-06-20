@@ -1,0 +1,4 @@
+docker run --rm --name certbot \
+-v /tmp/root-tls:/root/tls \
+-e "DNS_CONFIG=$(cat dns-config)" \
+-it ghcr.io/jobscale/certbot ./certonly
