@@ -9,18 +9,21 @@ dig-all() {
   do
     sleep 4
     echo -n "$i .. "
+    ANSWER_SECTION=$(
+      dig ${CHALLENGE} txt | grep -A 2 'ANSWER SECTION' | grep -w 'TXT'
+    )
     ANSWER=$(
-      dig ${CHALLENGE} txt | grep -A 2 'ANSWER SECTION' | grep -w 'TXT' | grep -- "${CERTBOT_VALIDATION}" | wc -l
+      echo "${ANSWER_SECTION}" | grep -- "${CERTBOT_VALIDATION}" | wc -l
     )
     [[ "${ANSWER}" == "1" ]] && break
   done
   echo
-  echo "dig result: ${ANSWER}"
+  echo -e "dig result: \n${ANSWER_SECTION}"
   echo "short result: $(dig ${CHALLENGE} txt +short)"
 }
 
 auth() {
-  echo "\e[33m $(TZ=Asia/Tokyo date -Iseconds) === [CERTBOT - AUTH] ${CERTBOT_DOMAIN} (${CERTBOT_REMAINING_CHALLENGES}) ===\e[0m"
+  echo -e "\e[33m $(TZ=Asia/Tokyo date -Iseconds) === [CERTBOT - AUTH] ${CERTBOT_DOMAIN} (${CERTBOT_REMAINING_CHALLENGES}) ===\e[0m"
   echo
   env | grep CERTBOT
   echo
