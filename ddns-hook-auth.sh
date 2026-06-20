@@ -15,6 +15,8 @@ dig-all() {
     [[ "${ANSWER}" == "1" ]] && break
   done
   echo
+  echo "dig result: ${ANSWER}"
+  echo "short result: $(dig ${CHALLENGE} txt +short)"
 }
 
 auth() {

@@ -5,6 +5,7 @@ cleanup() {
   echo " $(TZ=Asia/Tokyo date -Iseconds) === [CERTBOT - CLEANUP] ${CERTBOT_DOMAIN} (${CERTBOT_REMAINING_CHALLENGES}) ==="
   echo
   env | grep CERTBOT
+  echo "before delete short: $(dig ${CHALLENGE} txt +short)"
   echo
   CHALLENGE=_acme-challenge.${CERTBOT_DOMAIN}
   SUB=$(echo "${CHALLENGE}" | sed -e 's/jsx\.jp$//' | sed -e 's/\.$//')
