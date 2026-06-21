@@ -2,9 +2,10 @@
 set -eu
 
 cleanup() {
-  echo -e "\e[33m $(TZ=Asia/Tokyo date -Iseconds) === [CERTBOT - CLEANUP] ${CERTBOT_DOMAIN} (${CERTBOT_REMAINING_CHALLENGES}) ===\e[0m"
   echo
   env | grep CERTBOT
+  echo
+  echo -e "\e[32m $(TZ=Asia/Tokyo date -Iseconds) === [CERTBOT - CLEANUP] ${CERTBOT_DOMAIN} (${CERTBOT_REMAINING_CHALLENGES}) ===\e[0m"
   echo
   CHALLENGE=_acme-challenge.${CERTBOT_DOMAIN}
   echo "before delete short: $(dig ${CHALLENGE} txt +short)"
@@ -16,5 +17,5 @@ cleanup() {
 }
 
 {
-  cleanup | tee -a CHALLENGE.${CERTBOT_DOMAIN}.log
+  cleanup
 }
