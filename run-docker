@@ -1,5 +1,12 @@
-docker pull ghcr.io/jobscale/certbot
-docker run --rm --name certbot \
--v /tmp/root-tls:/root/tls \
--e "DNS_CONFIG=$(cat dns-config)" \
--it ghcr.io/jobscale/certbot ./certonly
+run-docker() {
+  DNS_CONFIG_FILE=dns-config
+  docker pull ghcr.io/jobscale/certbot
+  docker run --rm --name certbot \
+  -v /tmp/root-tls:/root/tls \
+  -e "DNS_CONFIG=$(cat ${DNS_CONFIG_FILE})" \
+  -it ghcr.io/jobscale/certbot ./certonly
+}
+
+{
+  time run-docker
+}

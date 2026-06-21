@@ -1,0 +1,25 @@
+run-cron() {
+  LOG=/tmp/cron-certificate.log
+  {
+    echo "$(TZ=Asia/Tokyo date -Iseconds) === [ Let's Encrypt ] ==="
+    cd /home/docker/certbot
+    bash run-docker
+    FILE=$(find /tmp/root-tls | sort | tail -1)
+    ls -l $FILE
+    cp $FILE /home/docker/partner/tls.zip
+
+    echo "$(TZ=Asia/Tokyo date -Iseconds) === [ Kubernetes ] ==="
+    cd ~/_/cloud/k8s/
+    . configure
+    updateTLSSecret
+    echo
+  } | tee -a $LOG 2>&1
+
+  exit
+}
+
+{
+  RUN_CRON=$(type run-cron | tail -n +3)
+  tmux new-session -d
+  tmux send-keys "${RUN_CRON}" C-m
+}
