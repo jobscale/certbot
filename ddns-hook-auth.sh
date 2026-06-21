@@ -9,9 +9,7 @@ dig-all() {
   do
     sleep 4
     echo -n "$i .. "
-    ANSWER_SECTION=$(
-      dig ${CHALLENGE} txt | grep -A 2 'ANSWER SECTION' | grep -w 'TXT'
-    )
+    ANSWER_SECTION=$(dig ${CHALLENGE} txt +short)
     ANSWER=$(
       echo "${ANSWER_SECTION}" | grep -- "${CERTBOT_VALIDATION}" | wc -l
     )
@@ -38,7 +36,7 @@ auth() {
   [[ "${CERTBOT_REMAINING_CHALLENGES}" == "0" ]] && {
     for domain in $(echo $CERTBOT_ALL_DOMAINS | sed -e 's/,/\n/g' | sort | uniq)
     do
-      dig _acme-challenge.${domain} txt | grep -A 2 'ANSWER SECTION' | grep -w 'TXT'
+      dig _acme-challenge.${domain} txt +short
     done
     sleep 120
   }
