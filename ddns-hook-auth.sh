@@ -4,14 +4,13 @@ set -eu
 dig-all() {
   CHALLENGE="$1"
   echo
-  echo "wait for DNS n seconds - ${CERTBOT_VALIDATION}"
-  for i in {30..1}
+  echo -n "wait for DNS n seconds - ${CERTBOT_VALIDATION} ... "
+  sleep 5
+  for i in {10..1}
   do
-    sleep 4
-    echo "  $i / 30"
-    echo "dig ${CHALLENGE} txt +short"
-    dig ${CHALLENGE} txt +short
-    ANSWER_SECTION=$(dig ${CHALLENGE} txt +short)
+    sleep 10
+    echo -n "$i ... "
+    ANSWER_SECTION=$(dig ${CHALLENGE} txt +short @8.8.8.8)
     ANSWER=$(
       echo "${ANSWER_SECTION}" | grep -- "${CERTBOT_VALIDATION}" | wc -l
     )
