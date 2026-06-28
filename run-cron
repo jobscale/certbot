@@ -1,5 +1,7 @@
 run-cron() {
-  LOG=/tmp/cron-certificate.log
+  LOG_DIR=/home/docker/certbot/logs
+  mkdir -p $LOG_DIR
+  LOG_FILE=$LOG_DIR/cron-certificate_$(date -Iseconds).log
   {
     echo "$(TZ=Asia/Tokyo date -Iseconds) === [ Let's Encrypt ] ==="
     cd /home/docker/certbot
@@ -13,7 +15,7 @@ run-cron() {
     . configure
     updateTLSSecret
     echo
-  } | tee -a $LOG 2>&1
+  } | tee -a $LOG_FILE 2>&1
 
   exit
 }

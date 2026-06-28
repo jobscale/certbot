@@ -10,3 +10,4 @@ cert.*
 *.crt
 *.csr
 *.cert
+logs/
