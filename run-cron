@@ -1,3 +1,8 @@
+#!/usr/bin/env bash
+set -eu
+
+export PATH=$PATH:/usr/local/bin:$HOME/bin:$HOME/.local/bin
+
 run-cron() {
   LOG_DIR=/home/docker/certbot/logs
   mkdir -p $LOG_DIR
@@ -11,7 +16,7 @@ run-cron() {
     cp $FILE /home/docker/partner/tls.zip
 
     echo "$(TZ=Asia/Tokyo date -Iseconds) === [ Kubernetes ] ==="
-    cd ~/_/cloud/k8s/
+    cd $HOME/_/cloud/k8s/
     . configure
     updateTLSSecret
     echo
@@ -20,8 +25,8 @@ run-cron() {
   exit
 }
 
-{
-  RUN_CRON=$(type run-cron | tail -n +3)
-  tmux new-session -d
-  tmux send-keys "${RUN_CRON}" C-m
+main() {
+  run-cron
 }
+
+main
