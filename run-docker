@@ -2,8 +2,8 @@
 set -eu
 
 run-docker() {
-  DNS_CONFIG_FILE=dns-config
   docker pull ghcr.io/jobscale/certbot
+  DNS_CONFIG_FILE=dns-config
   docker run --rm --name certbot \
   -v /tmp/root-tls:/root/tls \
   -e "DNS_CONFIG=$(cat ${DNS_CONFIG_FILE})" \
