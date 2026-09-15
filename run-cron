@@ -1,7 +1,10 @@
+#!/usr/bin/env bash
+set -eu
+
 run-cron() {
-  LOG_DIR=/home/docker/certbot/logs
+  LOG_DIR="$(dirname $0)/logs"
+  LOG_FILE="$LOG_DIR/cron-certificate_$(date -Iseconds).log"
   mkdir -p $LOG_DIR
-  LOG_FILE=$LOG_DIR/cron-certificate_$(date -Iseconds).log
   {
     echo "$(TZ=Asia/Tokyo date -Iseconds) === [ Let's Encrypt ] ==="
     cd /home/docker/certbot
