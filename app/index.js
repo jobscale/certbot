@@ -1,4 +1,4 @@
-import { createLogger } from '@jobscale/logger';
+import { createLogger } from '@jobscale/create-logger';
 import { decode } from './js-proxy.js';
 
 const {

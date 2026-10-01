@@ -1,6 +1,6 @@
 {
   "name": "certbot",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "certbot",
   "keywords": [],
   "author": "",
@@ -14,7 +14,7 @@
   },
   "pre-commit": "test",
   "dependencies": {
-    "@jobscale/logger": "^0.10.1"
+    "@jobscale/create-logger": "^1.0.5"
   },
   "devDependencies": {
     "@jobscale/eslint-plugin-standard": "^0.0.11",
