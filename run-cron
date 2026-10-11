@@ -20,7 +20,7 @@ run-cron() {
     . configure
     updateTLSSecret
     echo
-  } | tee -a $LOG_FILE 2>&1
+  } 2>&1 | tee -a $LOG_FILE
 
   exit
 }
