@@ -11,7 +11,7 @@ cleanup() {
   CHALLENGE=_acme-challenge.${CERTBOT_DOMAIN}
   echo -e "before delete short: \n$(dig ${CHALLENGE} txt +short)"
   echo
-  app/index.js delete jsx.jp TXT "${CHALLENGE}"
+  app/index.js delete jsx.jp TXT "${CHALLENGE}" --max 2
   echo
 }
 
