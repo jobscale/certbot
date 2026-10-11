@@ -11,10 +11,7 @@ cleanup() {
   CHALLENGE=_acme-challenge.${CERTBOT_DOMAIN}
   echo -e "before delete short: \n$(dig ${CHALLENGE} txt +short)"
   echo
-  SUB=$(echo "${CHALLENGE}" | sed -e 's/jsx\.jp$//' | sed -e 's/\.$//')
-  DOMAIN=${SUB} TOKEN=$(date +%s) \
-  TYPE=TXT R_DATA="${CERTBOT_VALIDATION}" \
-  DELETE=allow ENV=dev node app/index.js
+  app/index.js delete jsx.jp TXT "${CHALLENGE}"
   echo
 }
 

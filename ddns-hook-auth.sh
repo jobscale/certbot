@@ -45,10 +45,7 @@ auth() {
   echo -e "\e[32m $(TZ=Asia/Tokyo date -Iseconds) === [CERTBOT - AUTH] ${CERTBOT_DOMAIN} (${CERTBOT_REMAINING_CHALLENGES}) ===\e[0m"
   echo
   CHALLENGE=_acme-challenge.${CERTBOT_DOMAIN}
-  SUB=$(echo "${CHALLENGE}" | sed -e 's/jsx\.jp$//' | sed -e 's/\.$//')
-  DOMAIN=${SUB} TOKEN=$(date +%s) \
-  TYPE=TXT R_DATA="${CERTBOT_VALIDATION}" \
-  MULTIPLE=allow ENV=dev node app/index.js
+  app/index.js create jsx.jp TXT "${CHALLENGE}" "${CERTBOT_VALIDATION}"
   echo
 
   if [[ "${CERTBOT_REMAINING_CHALLENGES}" == "0" ]]; then
