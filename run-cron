@@ -3,6 +3,21 @@ set -eu
 
 export PATH=$PATH:/usr/local/bin:$HOME/bin:$HOME/.local/bin
 
+docker-standard() {
+  echo "$(TZ=Asia/Tokyo date -Iseconds) === [ Docker standard ] ==="
+  docker ps | grep tls-nodejs
+  cd /home/docker/partner/certs \
+  && rm jsx.jp/* && rmdir jsx.jp && unzip ../tls.zip && sudo chmod -R go+rX .
+  docker restart tls-nodejs
+}
+
+kubernetes() {
+  echo "$(TZ=Asia/Tokyo date -Iseconds) === [ Kubernetes ] ==="
+  cd $HOME/_/cloud/k8s/
+  . configure
+  updateTLSSecret
+}
+
 run-cron() {
   LOG_DIR="$(dirname $0)/logs"
   LOG_FILE="$LOG_DIR/cron-certificate_$(date -Iseconds).log"
@@ -15,10 +30,7 @@ run-cron() {
     ls -l $FILE
     cp $FILE /home/docker/partner/tls.zip
 
-    echo "$(TZ=Asia/Tokyo date -Iseconds) === [ Kubernetes ] ==="
-    cd $HOME/_/cloud/k8s/
-    . configure
-    updateTLSSecret
+    docker-standard || kubernetes
     echo
   } 2>&1 | tee -a $LOG_FILE
 
