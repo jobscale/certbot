@@ -7,7 +7,7 @@ docker-standard() {
   echo "$(TZ=Asia/Tokyo date -Iseconds) === [ Docker standard ] ==="
   docker ps | grep tls-nodejs
   cd /home/docker/partner/certs \
-  && rm jsx.jp/* && rmdir jsx.jp && unzip ../tls.zip && sudo chmod -R go+rX .
+  && rm -fr README jsx.jp && unzip ../tls.zip && sudo chmod -R go+rX .
   docker restart tls-nodejs
 }
 
