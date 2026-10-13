@@ -32,6 +32,7 @@ run-cron() {
 
     docker-standard || kubernetes
     echo
+    echo "$(TZ=Asia/Tokyo date -Iseconds) === [ Finish ] ==="
   } 2>&1 | tee -a $LOG_FILE
 
   exit
